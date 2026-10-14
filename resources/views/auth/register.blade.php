@@ -5,320 +5,170 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Crear Cuenta — Inventario</title>
+
+    <!-- Bootstrap 5.3 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    <!-- Google Fonts: Fraunces & DM Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,600&display=swap" rel="stylesheet">
 
-        body {
-            min-height: 100vh;
-            background: linear-gradient(-45deg, #f8fafc, #eef2ff, #f1f5f9, #e0e7ff);
-            background-size: 400% 400%;
-            animation: gradientShift 12s ease infinite;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 30px 20px;
-        }
-
-        @keyframes gradientShift {
-            0%   { background-position: 0% 50%; }
-            50%  { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            width: 500px; height: 500px;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.08), transparent 70%);
-            border-radius: 50%;
-            top: -150px; right: -150px;
-            animation: float 9s ease-in-out infinite;
-        }
-
-        body::after {
-            content: '';
-            position: fixed;
-            width: 400px; height: 400px;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.06), transparent 70%);
-            border-radius: 50%;
-            bottom: -100px; left: -100px;
-            animation: float 11s ease-in-out infinite reverse;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50%       { transform: translateY(-25px); }
-        }
-
-        .register-card {
-            background: #fff;
-            border: 1px solid #e2e8f0;
-            border-radius: 24px;
-            padding: 44px 40px;
-            width: 100%;
-            max-width: 460px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
-            position: relative;
-            z-index: 10;
-            animation: fadeInUp 0.6s ease;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        .brand-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 8px;
-        }
-
-        .brand-icon {
-            width: 44px; height: 44px;
-            background: linear-gradient(135deg, #10b981, #059669);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-        }
-
-        .brand-name {
-            font-size: 22px;
-            font-weight: 800;
-            color: #0f172a;
-            letter-spacing: -0.5px;
-        }
-
-        .brand-name span { color: #10b981; }
-
-        .register-title {
-            text-align: center;
-            margin-bottom: 28px;
-        }
-
-        .register-title h1 {
-            font-size: 22px;
-            font-weight: 800;
-            color: #0f172a;
-            margin-bottom: 5px;
-        }
-
-        .register-title p {
-            font-size: 13px;
-            color: #64748b;
-        }
-
-        .form-label {
-            font-size: 12px;
-            font-weight: 700;
-            color: #475569;
-            margin-bottom: 7px;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-
-        .input-wrapper { position: relative; }
-
-        .input-icon {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #94a3b8;
-            font-size: 15px;
-            z-index: 5;
-        }
-
-        .form-control {
-            background: #fff;
-            border: 1px solid #cbd5e1;
-            border-radius: 12px;
-            color: #0f172a;
-            padding: 12px 14px 12px 40px;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .form-control::placeholder { color: #94a3b8; }
-
-        .form-control:focus {
-            background: #fff;
-            border-color: #10b981;
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
-            color: #0f172a;
-            outline: none;
-        }
-
-        .form-control.is-invalid { border-color: #ef4444; }
-        .text-danger { color: #ef4444 !important; font-size: 12px; margin-top: 5px; }
-        .invalid-feedback { color: #ef4444; font-size: 12px; }
-
-        .row-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
-        .btn-register {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #10b981, #059669);
-            border: none;
-            border-radius: 12px;
-            color: #fff;
-            font-size: 15px;
-            font-weight: 700;
-            letter-spacing: 0.3px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
-            cursor: pointer;
-            margin-top: 8px;
-        }
-
-        .btn-register:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
-            background: linear-gradient(135deg, #059669, #047857);
-        }
-
-        .divider {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 20px 0 16px;
-        }
-
-        .divider::before, .divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: #e2e8f0;
-        }
-
-        .divider span { font-size: 12px; color: #64748b; font-weight: 600; }
-
-        .login-link {
-            text-align: center;
-            font-size: 14px;
-            color: #64748b;
-        }
-
-        .login-link a {
-            color: #10b981;
-            font-weight: 700;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .login-link a:hover { color: #047857; text-decoration: underline; }
-
-        .mb-field { margin-bottom: 16px; }
-
-        @media (max-width: 480px) {
-            .register-card { padding: 32px 22px; }
-            .row-fields { grid-template-columns: 1fr; }
-        }
-    </style>
+    <!-- Vite Assets -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
 
-<div class="register-card">
+<div class="inv-auth-wrapper">
+    <!-- Lado Izquierdo: Identidad Editorial -->
+    <div class="inv-auth-brand-side">
+        <div>
+            <a href="{{ url('/') }}" class="inv-brand mb-5">
+                <span class="inv-brand-badge">
+                    <i class="bi bi-box-seam"></i>
+                </span>
+                <span>Inventario</span>
+            </a>
 
-    <div class="brand-logo">
-        <div class="brand-icon">🛍️</div>
-        <div class="brand-name">Inventario</div>
-    </div>
+            <div class="mt-5 pt-3" style="max-width: 440px;">
+                <div class="overline mb-3">Nuevo Registro</div>
+                <h2 class="display-6 fw-bold mb-4" style="font-family: var(--font-display); line-height: 1.2;">
+                    Comienza a gestionar y explorar tecnología hoy.
+                </h2>
+                <p class="text-secondary mb-4" style="font-size: 15px; line-height: 1.6;">
+                    Crea tu cuenta en pocos segundos para acceder a precios de catálogo, seguimiento de disponibilidad y herramientas de control.
+                </p>
 
-    <div class="register-title">
-        <h1>Crea tu cuenta gratis</h1>
-        <p>Únete a la comunidad de Inventario</p>
-    </div>
-
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
-
-        <!-- Nombre completo -->
-        <div class="mb-field">
-            <label for="names" class="form-label">Nombre Completo</label>
-            <div class="input-wrapper">
-                <i class="bi bi-person input-icon"></i>
-                <input id="names" type="text" name="names"
-                    class="form-control @error('names') is-invalid @enderror"
-                    value="{{ old('names') }}" required autofocus placeholder="Juan Pérez">
-            </div>
-            @error('names')
-                <div class="text-danger"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</div>
-            @enderror
-        </div>
-
-        <!-- Email -->
-        <div class="mb-field">
-            <label for="email" class="form-label">Correo Electrónico</label>
-            <div class="input-wrapper">
-                <i class="bi bi-envelope input-icon"></i>
-                <input id="email" type="email" name="email"
-                    class="form-control @error('email') is-invalid @enderror"
-                    value="{{ old('email') }}" required placeholder="juan@ejemplo.com">
-            </div>
-            @error('email')
-                <div class="text-danger"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</div>
-            @enderror
-        </div>
-
-        <!-- Usuario -->
-        <div class="mb-field">
-            <label for="user_name" class="form-label">Nombre de Usuario</label>
-            <div class="input-wrapper">
-                <i class="bi bi-at input-icon"></i>
-                <input id="username_reg" type="text" name="user_name"
-                    class="form-control @error('user_name') is-invalid @enderror"
-                    value="{{ old('user_name') }}" required placeholder="juanperez123">
-            </div>
-            @error('user_name')
-                <div class="text-danger"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</div>
-            @enderror
-        </div>
-
-        <!-- Contraseñas en 2 columnas -->
-        <div class="row-fields mb-field">
-            <div>
-                <label for="password" class="form-label">Contraseña</label>
-                <div class="input-wrapper">
-                    <i class="bi bi-lock input-icon"></i>
-                    <input id="password" type="password" name="password"
-                        class="form-control @error('password') is-invalid @enderror"
-                        required placeholder="••••••••">
-                </div>
-                @error('password')
-                    <div class="text-danger" style="font-size:11px;">{{ $message }}</div>
-                @enderror
-            </div>
-            <div>
-                <label for="password_confirmation" class="form-label">Confirmar</label>
-                <div class="input-wrapper">
-                    <i class="bi bi-lock-fill input-icon"></i>
-                    <input id="password_confirmation" type="password" name="password_confirmation"
-                        class="form-control" required placeholder="••••••••">
+                <div class="p-4 rounded-3 border" style="background-color: var(--bg-surface); border-color: var(--border-warm) !important;">
+                    <div class="d-flex align-items-center gap-3 mb-2">
+                        <i class="bi bi-shield-check text-success fs-5"></i>
+                        <span class="fw-bold small text-dark">Privacidad y Seguridad</span>
+                    </div>
+                    <p class="text-secondary small mb-0">
+                        Tus datos se almacenan de forma estructurada y con contraseñas encriptadas bajo los estándares de Laravel.
+                    </p>
                 </div>
             </div>
         </div>
 
-        <button type="submit" class="btn-register" id="btn-register-submit">
-            <i class="bi bi-person-plus me-2"></i>Crear Cuenta Ahora
-        </button>
-    </form>
-
-    <div class="divider"><span>¿Ya tienes cuenta?</span></div>
-
-    <div class="login-link">
-        <a href="{{ route('login') }}"><i class="bi bi-box-arrow-in-right me-1"></i>Inicia Sesión</a>
+        <div class="text-muted small">
+            &copy; {{ date('Y') }} Inventario. Todos los derechos reservados.
+        </div>
     </div>
 
+    <!-- Lado Derecho: Formulario Limpio -->
+    <div class="inv-auth-form-side">
+        <div class="w-100" style="max-width: 420px; margin: 0 auto;">
+            
+            <div class="mb-4">
+                <div class="overline mb-1">Paso Inicial</div>
+                <h1 class="h3 fw-bold mb-2" style="font-family: var(--font-display);">Crear Cuenta</h1>
+                <p class="text-secondary small mb-0">Completa tus datos para registrarte en el sistema</p>
+            </div>
+
+            <form method="POST" action="{{ route('register') }}">
+                @csrf
+
+                <!-- Nombre completo -->
+                <div class="mb-3">
+                    <label for="names" class="form-label">Nombre Completo</label>
+                    <input
+                        id="names"
+                        type="text"
+                        name="names"
+                        class="form-control @error('names') is-invalid @enderror"
+                        value="{{ old('names') }}"
+                        required
+                        autofocus
+                        placeholder="Ej. Juan Pérez">
+                    @error('names')
+                        <div class="text-danger small mt-1"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <!-- Correo Electrónico -->
+                <div class="mb-3">
+                    <label for="email" class="form-label">Correo Electrónico</label>
+                    <input
+                        id="email"
+                        type="email"
+                        name="email"
+                        class="form-control @error('email') is-invalid @enderror"
+                        value="{{ old('email') }}"
+                        required
+                        placeholder="juan@ejemplo.com">
+                    @error('email')
+                        <div class="text-danger small mt-1"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <!-- Nombre de Usuario -->
+                <div class="mb-3">
+                    <label for="username_reg" class="form-label">Nombre de Usuario (Único)</label>
+                    <input
+                        id="username_reg"
+                        type="text"
+                        name="user_name"
+                        class="form-control @error('user_name') is-invalid @enderror"
+                        value="{{ old('user_name') }}"
+                        required
+                        placeholder="Ej. juan12"
+                        maxlength="15">
+                    @error('user_name')
+                        <div class="text-danger small mt-1"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <!-- Contraseña y Confirmación -->
+                <div class="row g-2 mb-4">
+                    <div class="col-sm-6">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input
+                            id="password"
+                            type="password"
+                            name="password"
+                            class="form-control @error('password') is-invalid @enderror"
+                            required
+                            placeholder="••••••••">
+                        @error('password')
+                            <div class="text-danger small mt-1" style="font-size: 11px;">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="password_confirmation" class="form-label">Confirmar Clave</label>
+                        <input
+                            id="password_confirmation"
+                            type="password"
+                            name="password_confirmation"
+                            class="form-control"
+                            required
+                            placeholder="••••••••">
+                    </div>
+                </div>
+
+                <!-- Botón de Registro -->
+                <button type="submit" class="btn btn-primary w-100 py-2 mb-3" id="btn-register-submit">
+                    <i class="bi bi-person-plus me-1"></i> Registrarme Ahora
+                </button>
+            </form>
+
+            <div class="border-top pt-4 text-center" style="border-color: var(--border-warm) !important;">
+                <span class="text-muted small">¿Ya tienes una cuenta?</span>
+                <a href="{{ route('login') }}" class="small fw-bold ms-1 text-decoration-none" style="color: var(--color-accent);">
+                    Iniciar sesión
+                </a>
+            </div>
+
+            <div class="text-center mt-3">
+                <a href="{{ url('/') }}" class="text-muted small text-decoration-none">
+                    <i class="bi bi-arrow-left me-1"></i> Volver a la Tienda
+                </a>
+            </div>
+
+        </div>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -1,3 +1,535 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,600&display=swap');
+
+:root {
+    /* --- Paleta Editorial-Cálida --- */
+    --bg-canvas: #FAF6EF;
+    --bg-surface: #FFFFFF;
+    --bg-subtle: #F3EEE5;
+    --bg-muted: #EBE4D8;
+    
+    --border-warm: #E7DFD3;
+    --border-warm-dark: #D3C7B5;
+    
+    --text-primary: #1F1B16;
+    --text-secondary: #6B6255;
+    --text-muted: #8E8475;
+    
+    --color-accent: #C8522C;
+    --color-accent-hover: #AF431F;
+    --color-accent-active: #963718;
+    --color-accent-subtle: #FDF2ED;
+    --color-accent-border: #F2C7B8;
+    
+    --color-secondary: #486856;
+    --color-secondary-subtle: #EDF3F0;
+    
+    /* Semántica sobria de Stock */
+    --stock-in-text: #255D43;
+    --stock-in-bg: #EBF4EF;
+    --stock-in-border: #C5DFD0;
+    
+    --stock-low-text: #9A6014;
+    --stock-low-bg: #FDF5E8;
+    --stock-low-border: #F0DAC0;
+    
+    --stock-out-text: #A23838;
+    --stock-out-bg: #FDF0F0;
+    --stock-out-border: #ECCBCB;
+    
+    /* Tipografía */
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    
+    /* Radios moderados */
+    --radius-xs: 4px;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-pill: 999px;
+    
+    /* Sombras nítidas y sutiles */
+    --shadow-sm: 0 1px 2px rgba(31, 27, 22, 0.04);
+    --shadow-md: 0 4px 12px rgba(31, 27, 22, 0.05);
+    --shadow-lg: 0 10px 24px rgba(31, 27, 22, 0.07);
+    --transition-fast: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+    
+    /* Override de Bootstrap 5 */
+    --bs-body-bg: var(--bg-canvas);
+    --bs-body-color: var(--text-primary);
+    --bs-body-font-family: var(--font-body);
+    --bs-primary: #C8522C;
+    --bs-primary-rgb: 200, 82, 44;
+    --bs-secondary: #486856;
+    --bs-secondary-rgb: 72, 104, 86;
+    --bs-success: #255D43;
+    --bs-warning: #9A6014;
+    --bs-danger: #A23838;
+    --bs-border-color: var(--border-warm);
+    --bs-border-radius: var(--radius-md);
+    --bs-border-radius-sm: var(--radius-sm);
+    --bs-border-radius-lg: var(--radius-lg);
+}
+
+/* =========================================================
+   Reset y Tipografía Global
+   ========================================================= */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-canvas) !important;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, .font-display {
+    font-family: var(--font-display);
+    color: var(--text-primary);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.font-body {
+    font-family: var(--font-body);
+}
+
+.text-muted, .text-secondary {
+    color: var(--text-secondary) !important;
+}
+
+.overline {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+}
+
+/* =========================================================
+   Navbar Editorial
+   ========================================================= */
+.inv-navbar {
+    background-color: var(--bg-canvas);
+    border-bottom: 1px solid var(--border-warm);
+    padding: 16px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.inv-brand {
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: -0.01em;
+}
+
+.inv-brand:hover {
+    color: var(--color-accent);
+}
+
+.inv-brand-badge {
+    width: 32px;
+    height: 32px;
+    background-color: var(--color-accent);
+    color: #FFFFFF;
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.inv-nav-link {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 8px 14px;
+    position: relative;
+    transition: color var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.inv-nav-link:hover {
+    color: var(--text-primary);
+}
+
+.inv-nav-link.active {
+    color: var(--color-accent);
+    font-weight: 600;
+}
+
+.inv-nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -16px;
+    left: 14px;
+    right: 14px;
+    height: 2px;
+    background-color: var(--color-accent);
+    border-radius: 2px;
+}
+
+/* =========================================================
+   Botones
+   ========================================================= */
+.btn {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 9px 18px;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    box-shadow: none;
+}
+
+.btn-primary {
+    background-color: var(--color-accent) !important;
+    border: 1px solid var(--color-accent) !important;
+    color: #FFFFFF !important;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background-color: var(--color-accent-hover) !important;
+    border-color: var(--color-accent-hover) !important;
+    color: #FFFFFF !important;
+    transform: translateY(-1px);
+}
+
+.btn-primary:active {
+    background-color: var(--color-accent-active) !important;
+    border-color: var(--color-accent-active) !important;
+    transform: translateY(0);
+}
+
+.btn-outline-warm {
+    background-color: transparent !important;
+    border: 1px solid var(--border-warm) !important;
+    color: var(--text-primary) !important;
+}
+
+.btn-outline-warm:hover {
+    background-color: var(--bg-subtle) !important;
+    border-color: var(--border-warm-dark) !important;
+    color: var(--text-primary) !important;
+}
+
+.btn-warm-subtle {
+    background-color: var(--bg-subtle) !important;
+    border: 1px solid transparent !important;
+    color: var(--text-primary) !important;
+}
+
+.btn-warm-subtle:hover {
+    background-color: var(--bg-muted) !important;
+    color: var(--text-primary) !important;
+}
+
+.btn-danger-subtle {
+    background-color: var(--stock-out-bg) !important;
+    border: 1px solid var(--stock-out-border) !important;
+    color: var(--stock-out-text) !important;
+}
+
+.btn-danger-subtle:hover {
+    background-color: #F8DCDC !important;
+    color: var(--stock-out-text) !important;
+}
+
+/* =========================================================
+   Tarjetas & Paneles (inv-card)
+   ========================================================= */
+.inv-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-warm);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.inv-card-hover:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-warm-dark);
+    box-shadow: var(--shadow-md);
+}
+
+/* Hero Editorial */
+.inv-hero {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-warm);
+    border-radius: var(--radius-lg);
+    padding: 38px 40px;
+    margin-bottom: 32px;
+}
+
+/* =========================================================
+   Tarjeta de Producto
+   ========================================================= */
+.inv-product-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-warm);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.inv-product-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--border-warm-dark);
+    box-shadow: var(--shadow-md);
+}
+
+.inv-product-media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: var(--bg-subtle);
+    overflow: hidden;
+    border-bottom: 1px solid var(--border-warm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.inv-product-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 300ms ease;
+}
+
+.inv-product-card:hover .inv-product-media img {
+    transform: scale(1.03);
+}
+
+.inv-product-media .placeholder-icon {
+    font-size: 3rem;
+    color: var(--text-muted);
+}
+
+.inv-product-body {
+    padding: 18px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.inv-product-title {
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.35;
+    margin-bottom: 6px;
+}
+
+.inv-product-price {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+}
+
+/* =========================================================
+   Badges de Stock & Estado
+   ========================================================= */
+.inv-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 4px 9px;
+    border-radius: var(--radius-xs);
+    line-height: 1.2;
+}
+
+.badge-stock-in {
+    background-color: var(--stock-in-bg);
+    color: var(--stock-in-text);
+    border: 1px solid var(--stock-in-border);
+}
+
+.badge-stock-low {
+    background-color: var(--stock-low-bg);
+    color: var(--stock-low-text);
+    border: 1px solid var(--stock-low-border);
+}
+
+.badge-stock-out {
+    background-color: var(--stock-out-bg);
+    color: var(--stock-out-text);
+    border: 1px solid var(--stock-out-border);
+}
+
+.badge-role-admin {
+    background-color: var(--color-accent-subtle);
+    color: var(--color-accent);
+    border: 1px solid var(--color-accent-border);
+}
+
+.badge-role-user {
+    background-color: var(--bg-subtle);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-warm);
+}
+
+/* =========================================================
+   Formularios & Controles
+   ========================================================= */
+.form-control, .form-select {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-warm);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 14px;
+    padding: 10px 14px;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: var(--bg-surface);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(200, 82, 44, 0.12);
+    color: var(--text-primary);
+    outline: none;
+}
+
+.form-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+}
+
+/* =========================================================
+   Tablas (Admin Dashboard & Usuarios)
+   ========================================================= */
+.inv-table-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-warm);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.inv-table {
+    width: 100%;
+    margin-bottom: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.inv-table thead th {
+    background-color: var(--bg-subtle);
+    color: var(--text-secondary);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border-warm);
+}
+
+.inv-table tbody td {
+    padding: 14px 18px;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--border-warm);
+    color: var(--text-primary);
+    font-size: 14px;
+    background-color: var(--bg-surface);
+}
+
+.inv-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.inv-table tbody tr:hover td {
+    background-color: #FCFAF6;
+}
+
+/* Tarjetas de Estadística Admin */
+.inv-stat-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-warm);
+    border-radius: var(--radius-md);
+    padding: 22px 24px;
+    height: 100%;
+}
+
+.inv-stat-number {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.1;
+    margin: 8px 0 4px;
+}
+
+/* =========================================================
+   Auth: Split Screen Editorial
+   ========================================================= */
+.inv-auth-wrapper {
+    min-height: 100vh;
+    display: flex;
+    background-color: var(--bg-canvas);
+}
+
+.inv-auth-brand-side {
+    flex: 1;
+    background-color: var(--bg-subtle);
+    border-right: 1px solid var(--border-warm);
+    padding: 56px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+}
+
+.inv-auth-form-side {
+    width: 100%;
+    max-width: 480px;
+    padding: 56px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: var(--bg-surface);
+}
+
+@media (max-width: 991.98px) {
+    .inv-auth-brand-side {
+        display: none;
+    }
+    .inv-auth-form-side {
+        max-width: 100%;
+        min-height: 100vh;
+        padding: 40px 24px;
+    }
+}

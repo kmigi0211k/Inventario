@@ -41,7 +41,11 @@ class UserController extends Controller
             return redirect()->back()->with('error', 'No puedes quitarte el permiso de administrador a ti mismo.');
         }
 
-        $user->is_admin = !$user->is_admin;
+        $adminRole = \App\Models\Role::firstOrCreate(['description' => 'Admin'], ['status' => 1]);
+        $nonAdminRole = \App\Models\Role::where('description', '!=', 'Admin')->first()
+            ?? \App\Models\Role::firstOrCreate(['description' => 'Customer'], ['status' => 1]);
+
+        $user->role_id = ($user->role_id == $adminRole->id) ? $nonAdminRole->id : $adminRole->id;
         $user->save();
 
         return redirect()->back()->with('success', 'Rol de usuario actualizado correctamente.');

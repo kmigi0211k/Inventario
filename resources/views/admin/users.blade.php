@@ -1,110 +1,109 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid px-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+<div class="container py-3">
+    <!-- Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
         <div>
-            <h3 class="fw-bold text-dark mb-0"><i class="bi bi-people-fill me-2 text-primary"></i>Gestión de Usuarios</h3>
-            <p class="text-muted small">Administra los roles y visualiza los usuarios registrados en la plataforma.</p>
+            <div class="overline mb-1">Control de Acceso</div>
+            <h1 class="h2 fw-bold mb-1" style="font-family: var(--font-display);">Gestión de Usuarios</h1>
+            <p class="text-secondary small mb-0">Administra los roles y cuentas registradas en la plataforma.</p>
         </div>
-        <div class="bg-white px-4 py-2 rounded-4 shadow-sm border">
-            <span class="text-muted small">Total Usuarios:</span>
-            <span class="fw-bold text-primary h5 mb-0 ms-2">{{ $users->count() }}</span>
+        <div class="d-flex align-items-center gap-2">
+            <a href="{{ route('products.dashboard') }}" class="btn btn-outline-warm">
+                <i class="bi bi-arrow-left"></i> Volver al Panel
+            </a>
+            <div class="inv-card py-2 px-3 d-inline-flex align-items-center gap-2">
+                <span class="overline mb-0">Total:</span>
+                <span class="fw-bold" style="font-family: var(--font-display); color: var(--color-accent);">{{ $users->count() }}</span>
+            </div>
         </div>
     </div>
 
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show rounded-4 border-0 shadow-sm mb-4" role="alert">
-            <i class="bi bi-check-circle me-2"></i>{{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show rounded-4 border-0 shadow-sm mb-4" role="alert">
-            <i class="bi bi-exclamation-triangle me-2"></i>{{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
-    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+    <!-- Tabla de Usuarios -->
+    <div class="inv-table-card">
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="bg-light text-muted small text-uppercase">
+            <table class="inv-table">
+                <thead>
                     <tr>
-                        <th class="ps-4 py-3">Usuario / Email</th>
-                        <th class="py-3">Nombre Real</th>
-                        <th class="py-3 text-center">Rol</th>
-                        <th class="py-3">Fecha Registro</th>
-                        <th class="py-3">Última Conexión</th>
-                        <th class="py-3 text-center pe-4">Acciones</th>
+                        <th class="ps-4">Usuario / Email</th>
+                        <th>Nombre Registrado</th>
+                        <th class="text-center">Rol</th>
+                        <th>Fecha Registro</th>
+                        <th>Último Acceso</th>
+                        <th class="text-center pe-4">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($users as $user)
                     <tr>
                         <td class="ps-4">
-                            <div class="d-flex align-items-center">
-                                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; font-weight: bold;">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold" 
+                                     style="width: 38px; height: 38px; background-color: var(--color-accent-subtle); color: var(--color-accent); border: 1px solid var(--color-accent-border); font-size: 14px;">
                                     {{ strtoupper(substr($user->user_name, 0, 1)) }}
                                 </div>
                                 <div>
                                     <div class="fw-bold text-dark">{{ $user->user_name }}</div>
-                                    <div class="text-muted small">{{ $user->email }}</div>
+                                    <div class="text-muted small">{{ $user->email ?? 'Sin correo' }}</div>
                                 </div>
                             </div>
                         </td>
                         <td>
                             @if($user->person)
-                                <span class="text-dark">{{ $user->person->names }} {{ $user->person->last_names }}</span>
+                                <span class="text-dark">{{ $user->person->names }} {{ $user->person->last_name }}</span>
                             @else
-                                <span class="text-muted small italic">Sin perfil completado</span>
+                                <span class="text-muted small fst-italic">Sin perfil asignado</span>
                             @endif
                         </td>
                         <td class="text-center">
                             @if($user->isAdmin())
-                                <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-2 fw-bold">Administrador</span>
+                                <span class="inv-badge badge-role-admin">
+                                    <i class="bi bi-shield-lock-fill"></i> Administrador
+                                </span>
                             @else
-                                <span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill px-3 py-2 fw-bold">Usuario</span>
+                                <span class="inv-badge badge-role-user">
+                                    <i class="bi bi-person"></i> Usuario
+                                </span>
                             @endif
                         </td>
                         <td>
                             <div class="text-dark small">{{ $user->created_at->format('d/m/Y') }}</div>
-                            <div class="text-muted" style="font-size: 10px;">Creado {{ $user->created_at->diffForHumans() }}</div>
+                            <div class="text-muted" style="font-size: 11px;">{{ $user->created_at->diffForHumans() }}</div>
                         </td>
                         <td>
                             @if(isset($user->last_login_at) && $user->last_login_at)
                                 <div class="text-dark small">{{ \Carbon\Carbon::parse($user->last_login_at)->format('d/m/Y H:i') }}</div>
-                                <div class="text-muted" style="font-size: 10px;">{{ \Carbon\Carbon::parse($user->last_login_at)->diffForHumans() }}</div>
+                                <div class="text-muted" style="font-size: 11px;">{{ \Carbon\Carbon::parse($user->last_login_at)->diffForHumans() }}</div>
                             @else
-                                <span class="text-muted small">No disponible</span>
+                                <span class="text-muted small">No registrado</span>
                             @endif
                         </td>
                         <td class="text-center pe-4">
                             @if($user->id !== Auth::id())
                                 <div class="d-flex justify-content-center gap-2">
-                                    <form action="{{ route('admin.users.toggle', $user->id) }}" method="POST" class="d-inline admin-toggle-form">
+                                    <form action="{{ route('admin.users.toggle', $user->id) }}" method="POST" class="d-inline admin-toggle-form mb-0">
                                         @csrf
                                         @if($user->isAdmin())
-                                            <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-bold btn-toggle-admin" data-name="{{ $user->user_name }}" data-action="quitar">
-                                                Quitar Admin
+                                            <button type="button" class="btn btn-outline-warm py-1 px-2 small btn-toggle-admin" data-name="{{ $user->user_name }}" data-action="quitar">
+                                                <i class="bi bi-shield-minus me-1"></i> Quitar Admin
                                             </button>
                                         @else
-                                            <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-bold btn-toggle-admin" data-name="{{ $user->user_name }}" data-action="hacer">
-                                                Hacer Admin
+                                            <button type="button" class="btn btn-outline-warm py-1 px-2 small btn-toggle-admin" data-name="{{ $user->user_name }}" data-action="hacer" style="border-color: var(--color-accent-border) !important; color: var(--color-accent) !important;">
+                                                <i class="bi bi-shield-plus me-1"></i> Hacer Admin
                                             </button>
                                         @endif
                                     </form>
 
-                                    <form action="{{ route('admin.users.reset', $user->id) }}" method="POST" class="d-inline admin-reset-form">
+                                    <form action="{{ route('admin.users.reset', $user->id) }}" method="POST" class="d-inline admin-reset-form mb-0">
                                         @csrf
-                                        <button type="button" class="btn btn-warning btn-sm rounded-pill px-3 fw-bold shadow-sm btn-reset-pass" data-name="{{ $user->user_name }}">
-                                            <i class="bi bi-key-fill"></i> Resetear
+                                        <button type="button" class="btn btn-warm-subtle py-1 px-2 small btn-reset-pass" data-name="{{ $user->user_name }}" title="Resetear contraseña a 1234">
+                                            <i class="bi bi-key"></i> Resetear
                                         </button>
                                     </form>
                                 </div>
                             @else
-                                <span class="badge bg-light text-muted rounded-pill px-3 py-2">Tú (Admin)</span>
+                                <span class="inv-badge badge-role-user">Tú (Sesión actual)</span>
                             @endif
                         </td>
                     </tr>
@@ -124,12 +123,12 @@
             const action = this.dataset.action;
             
             Swal.fire({
-                title: '¿Estás seguro?',
-                text: `¿Quieres ${action} administrador al usuario ${name}?`,
+                title: '¿Modificar permisos?',
+                text: `¿Deseas ${action} administrador al usuario "${name}"?`,
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonColor: '#4f46e5',
-                cancelButtonColor: '#64748b',
+                confirmButtonColor: '#C8522C',
+                cancelButtonColor: '#6B6255',
                 confirmButtonText: 'Sí, cambiar rol',
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
@@ -146,13 +145,13 @@
             const name = this.dataset.name;
             
             Swal.fire({
-                title: 'Resetear Contraseña',
-                text: `La clave de ${name} volverá a ser "12345678". ¿Continuar?`,
+                title: '¿Resetear contraseña?',
+                text: `La contraseña de ${name} se restablecerá a "1234". ¿Continuar?`,
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#f59e0b',
-                cancelButtonColor: '#64748b',
-                confirmButtonText: 'Sí, resetear',
+                confirmButtonColor: '#9A6014',
+                cancelButtonColor: '#6B6255',
+                confirmButtonText: 'Sí, restablecer',
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {

@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
+use Illuminate\Support\Facades\DB;
+
 class RegisteredUserController extends Controller
 {
     /**
@@ -37,23 +39,31 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $person = \App\Models\Person::create([
-            'names' => $request->names,
-            'email' => $request->email,
-        ]);
+        return DB::transaction(function () use ($request) {
+            // Obtener el rol por defecto para nuevos usuarios (Customer), o rol no-admin existente
+            $defaultRole = \App\Models\Role::where('description', 'Customer')->first()
+                ?? \App\Models\Role::find(2)
+                ?? \App\Models\Role::where('description', '!=', 'Admin')->first()
+                ?? \App\Models\Role::firstOrCreate(['description' => 'Customer'], ['status' => 1]);
 
-        $user = User::create([
-            'user_name' => $request->user_name,
-            'password' => Hash::make($request->password),
-            'status' => 1,
-            'person_id' => $person->id,
-            'role_id' => 2, // Assuming 2 is a default 'Customer' role
-        ]);
+            $person = \App\Models\Person::create([
+                'names' => $request->names,
+                'email' => $request->email,
+            ]);
 
-        event(new Registered($user));
+            $user = User::create([
+                'user_name' => $request->user_name,
+                'password' => Hash::make($request->password),
+                'status' => 1,
+                'person_id' => $person->id,
+                'role_id' => $defaultRole->id,
+            ]);
 
-        Auth::login($user);
+            event(new Registered($user));
 
-        return redirect(RouteServiceProvider::HOME);
+            Auth::login($user);
+
+            return redirect(RouteServiceProvider::HOME);
+        });
     }
 }

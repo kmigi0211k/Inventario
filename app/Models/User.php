@@ -58,4 +58,19 @@ class User extends Authenticatable
     {
         return $this->role && $this->role->description === 'Admin';
     }
+
+    public function getEmailAttribute()
+    {
+        return $this->person ? $this->person->email : null;
+    }
+
+    public function getEmailForPasswordReset()
+    {
+        return $this->person ? $this->person->email : null;
+    }
+
+    public function routeNotificationForMail($notification = null)
+    {
+        return $this->person ? $this->person->email : null;
+    }
 }

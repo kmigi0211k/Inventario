@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         // Roles
         \App\Models\Role::firstOrCreate(['description' => 'Admin'], ['status' => 1]);
         \App\Models\Role::firstOrCreate(['description' => 'Secretary'], ['status' => 0]);
+        \App\Models\Role::firstOrCreate(['description' => 'Customer'], ['status' => 1]);
 
         // Person
         $person = \App\Models\Person::firstOrCreate(
