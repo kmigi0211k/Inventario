@@ -16,6 +16,7 @@ Route::get('/products/{product}', [ProductController::class, 'show'])->name('pro
 Route::middleware(['auth'])->group(function () {
     // Rutas de Administrador
     Route::middleware(['auth', \App\Http\Middleware\IsAdmin::class])->group(function () {
+        Route::get('/admin/dashboard', [\App\Http\Controllers\AdminDashboardController::class, 'index'])->name('admin.dashboard');
         Route::get('/admin/users', [\App\Http\Controllers\UserController::class, 'adminIndex'])->name('admin.users');
         Route::post('/admin/users/{user}/toggle-admin', [\App\Http\Controllers\UserController::class, 'toggleAdmin'])->name('admin.users.toggle');
         Route::post('/admin/users/{user}/reset-password', [\App\Http\Controllers\UserController::class, 'resetPassword'])->name('admin.users.reset');

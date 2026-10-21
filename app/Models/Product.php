@@ -23,6 +23,8 @@ class Product extends Model
 {
     use HasFactory;
 
+    public const LOW_STOCK_THRESHOLD = 5;
+
     protected $fillable = [
         'name',
         'description',
