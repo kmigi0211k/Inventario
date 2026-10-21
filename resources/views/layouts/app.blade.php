@@ -42,6 +42,11 @@
                         </li>
                         @if(Auth::check() && Auth::user()->isAdmin())
                         <li class="nav-item">
+                            <a class="inv-nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
+                                <i class="bi bi-grid-1x2"></i> Panel General
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="inv-nav-link {{ request()->routeIs('products.dashboard') ? 'active' : '' }}" href="{{ route('products.dashboard') }}">
                                 <i class="bi bi-speedometer2"></i> Panel Admin
                             </a>

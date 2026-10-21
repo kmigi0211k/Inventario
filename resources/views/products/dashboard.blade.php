@@ -13,6 +13,9 @@
             </p>
         </div>
         <div class="d-flex gap-2 flex-wrap">
+            <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-warm" id="btn-back-general-dashboard">
+                <i class="bi bi-arrow-left"></i> Panel General
+            </a>
             <a href="{{ route('admin.users') }}" class="btn btn-outline-warm">
                 <i class="bi bi-people"></i> Gestión de Usuarios
             </a>
